@@ -5,7 +5,7 @@ import numpy as np
 import torch as th
 import pybullet_data
 from gym import spaces
-
+import cv2 ## TODO TODO TEMPO
 from environments.srl_env import SRLGymEnv
 from state_representation.episode_saver import EpisodeSaver
 
@@ -234,7 +234,16 @@ class MobileRobotGymEnv(SRLGymEnv):
         :return: (numpy array)
         """
         self._observation = self.render("rgb_array")
-        return self._observation
+        ## TODO TODO TEMPO code
+        # Frechet_Mean = np.load("../../srl_zoo/data/Mobile_random_FM.npy")
+
+        Frechet_Mean = np.load("./srl_zoo/data/Mobile_random_FM.npy")[0][..., ::-1]
+        self._observation = cv2.resize(self._observation, (128,128))
+        
+        A = self._observation - Frechet_Mean
+        A = 255*(A - np.min(A))/(np.max(A) - np.min(A))
+        # import ipdb; ipdb.set_trace()
+        return A.astype(np.uint8)
 
     def step(self, action):
         # True if it has bumped against a wall
