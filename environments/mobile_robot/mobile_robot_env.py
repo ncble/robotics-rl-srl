@@ -148,8 +148,16 @@ class MobileRobotGymEnv(SRLGymEnv):
             self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(self.state_dim,), dtype=np.float32)
 
     def getTargetPos(self):
+        # noise = (2*np.random.random(2)-1)
+        # angle = np.pi/2
+        # rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
+        
         # Return only the [x, y] coordinates
+        # return (self.target_pos[:2] + 0.0*noise).dot(rotation)
+        # return (self.target_pos[:2]).dot(rotation)
         return self.target_pos[:2]
+        
+        
 
     # @staticmethod
     def getGroundTruthDim(self):
@@ -165,7 +173,10 @@ class MobileRobotGymEnv(SRLGymEnv):
 
     def getRobotPos(self):
         # Return only the [x, y] coordinates
-        return np.array(self.robot_pos)[:2]
+        noise = (2*np.random.random(2)-1)
+        # import ipdb; ipdb.set_trace()
+        # print("Yes")
+        return np.array(self.robot_pos)[:2] + 0.4*noise
 
     def getGroundTruth(self):
         """
