@@ -151,11 +151,13 @@ class MobileRobotGymEnv(SRLGymEnv):
         # noise = (2*np.random.random(2)-1)
         # angle = np.pi/2
         # rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
-        
+        # noise = 4.0*(2*np.random.random(98)-1)
         # Return only the [x, y] coordinates
         # return (self.target_pos[:2] + 0.0*noise).dot(rotation)
         # return (self.target_pos[:2]).dot(rotation)
         return self.target_pos[:2]
+        # return np.concatenate([self.target_pos[:2], noise])
+        
         
         
 
@@ -169,14 +171,14 @@ class MobileRobotGymEnv(SRLGymEnv):
         if not self._random_target:
             return 2
         else:
-            return 4
+            return 200#4 ## TODO TODO
 
     def getRobotPos(self):
         # Return only the [x, y] coordinates
-        noise = (2*np.random.random(2)-1)
+        noise = 4.0*(2*np.random.random(196)-1)
+        # return np.array(self.robot_pos)[:2]
         # import ipdb; ipdb.set_trace()
-        # print("Yes")
-        return np.array(self.robot_pos)[:2] + 0.4*noise
+        return np.concatenate([np.array(self.robot_pos)[:2], noise])
 
     def getGroundTruth(self):
         """
@@ -394,7 +396,7 @@ class MobileRobotGymEnv(SRLGymEnv):
         :return: (float)
         """
         # Distance to target
-        distance = np.linalg.norm(self.getTargetPos() - self.robot_pos[:2], 2)
+        distance = np.linalg.norm(self.getTargetPos()[:2] - self.robot_pos[:2], 2) ## TODO TODO
         reward = 0
 
         if distance <= REWARD_DIST_THRESHOLD:

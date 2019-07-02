@@ -32,7 +32,7 @@ def loadEpisodesData(folder):
     return x, y
 
 
-def plotGatheredData(x_list, y_list, y_limits, timesteps, title, legends, no_display, truncate_x=-1, normalization=False, figpath=None):
+def plotGatheredData(x_list, y_list, y_limits, timesteps, title, legends, no_display, truncate_x=-1, normalization=False, figpath=None, no_legend=False):
     assert len(legends) == len(y_list)
     printGreen("{} Experiments".format(len(y_list)))
 
@@ -79,8 +79,8 @@ def plotGatheredData(x_list, y_list, y_limits, timesteps, title, legends, no_dis
         plt.ylabel('Rewards')
     plt.title(title, **fontstyle)
     plt.ylim(y_limits)
-
-    plt.legend(framealpha=0.8, frameon=True, labelspacing=0.01, loc='lower right', fontsize=16)
+    if not no_legend:
+        plt.legend(framealpha=0.8, frameon=True, labelspacing=0.01, loc='lower right', fontsize=16)
     if figpath is not None:
         plt.savefig(figpath)
     if not no_display:
@@ -153,7 +153,7 @@ def GatherExperiments(folders, algo,  window=40, title="", min_num_x=-1,
 
 def comparePlots(path,  algo, y_limits, title="Learning Curve",
                  timesteps=False, truncate_x=-1, no_display=False, normalization=False, figpath=None,
-                 exclude_list=None):
+                 exclude_list=None, no_legend=False):
     """
     :param path: (str) path to the folder where the plots are stored
     :param plots: ([str]) List of saved plots as npz file
@@ -201,7 +201,7 @@ def comparePlots(path,  algo, y_limits, title="Learning Curve",
     # printGreen('y_list shape {}'.format(np.array(y_list[1]).shape))
 
     plotGatheredData(x_list, y_list, y_limits, timesteps, title, legends,
-                     no_display, truncate_x, normalization, figpath=figpath)
+                     no_display, truncate_x, normalization, figpath=figpath, no_legend=no_legend)
 
 
 if __name__ == '__main__':
@@ -223,7 +223,8 @@ if __name__ == '__main__':
                         help='To normalize the output by the maximum reward')
     parser.add_argument('--figpath', type=str, default=None, help='Save figure to path.')
     parser.add_argument('--exclude', nargs='+', type=str, default=None, help='SRL models to be excluded.')
-    #
+    parser.add_argument('--no-legend', action='store_true', default=False, help='Remove legend.')
+    
     # parser.add_argument('--tasks', type=str, nargs='+', default=["cc"],
     #                     help='The tasks for the robot',
     #                     choices=["cc", "ec", "sqc", "sc"])
@@ -245,7 +246,7 @@ if __name__ == '__main__':
 
     comparePlots(args.input_dir, args.algo, title=args.title, y_limits=y_limits, no_display=args.no_display,
                  timesteps=args.timesteps, truncate_x=args.truncate_x, normalization=args.norm, figpath=args.figpath,
-                 exclude_list=args.exclude)
+                 exclude_list=args.exclude, no_legend=args.no_legend)
 
 
 # python -m replay.plot_pipeline -i logs/OmnirobotEnv-v0 --algo ppo2 --title cc --timesteps
