@@ -211,7 +211,9 @@ class KukaButtonGymEnv(SRLGymEnv):
             return 6
 
     def getRobotPos(self):
-        return np.array(self.getArmPos())
+        noise = 2 * np.random.random(3) - 1 
+
+        return np.array(self.getArmPos()) + 0.03 * noise
 
     def getArmPos(self):
         """
