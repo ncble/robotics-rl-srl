@@ -211,9 +211,9 @@ class KukaButtonGymEnv(SRLGymEnv):
             return 6
 
     def getRobotPos(self):
-        noise = 2 * np.random.random(3) - 1 
+        # noise = 2 * np.random.random(3) - 1 
 
-        return np.array(self.getArmPos()) + 0.03 * noise
+        return np.array(self.getArmPos()) #+ 0.03 * noise
 
     def getArmPos(self):
         """
@@ -251,7 +251,7 @@ class KukaButtonGymEnv(SRLGymEnv):
         p.resetSimulation()
         p.setPhysicsEngineParameter(numSolverIterations=150)
         p.setTimeStep(self._timestep)
-        p.loadURDF(os.path.join(self._urdf_root, "plane.urdf"), [0, 0, -1])
+        # p.loadURDF(os.path.join(self._urdf_root, "plane.urdf"), [0, 0, -1]) ## HACK TODO TODO TODO
 
         self.table_uid = p.loadURDF(os.path.join(self._urdf_root, "table/table.urdf"), 0.5000000, 0.00000, -.820000,
                                     0.000000, 0.000000, 0.0, 1.0)

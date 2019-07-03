@@ -171,14 +171,17 @@ class MobileRobotGymEnv(SRLGymEnv):
         if not self._random_target:
             return 2
         else:
-            return 200#4 ## TODO TODO
+            return 4
 
     def getRobotPos(self):
         # Return only the [x, y] coordinates
-        noise = 4.0*(2*np.random.random(196)-1)
-        # return np.array(self.robot_pos)[:2]
+        # noise = 4.0*(2*np.random.random(196)-1)
+        return np.array(self.robot_pos)[:2]
         # import ipdb; ipdb.set_trace()
-        return np.concatenate([np.array(self.robot_pos)[:2], noise])
+        # return np.concatenate([np.array(self.robot_pos)[:2], noise])
+        # angle = np.pi/2
+        # rotation = np.array([[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]])
+        # return np.array(self.robot_pos)[:2].dot(rotation)
 
     def getGroundTruth(self):
         """
@@ -210,7 +213,7 @@ class MobileRobotGymEnv(SRLGymEnv):
         p.resetSimulation()
         p.setPhysicsEngineParameter(numSolverIterations=150)
         p.setTimeStep(self._timestep)
-        p.loadURDF(os.path.join(self._urdf_root, "plane.urdf"), [0, 0, 0])
+        # p.loadURDF(os.path.join(self._urdf_root, "plane.urdf"), [0, 0, 0])
         p.setGravity(0, 0, -10)
 
         # Init the robot randomly
@@ -396,7 +399,7 @@ class MobileRobotGymEnv(SRLGymEnv):
         :return: (float)
         """
         # Distance to target
-        distance = np.linalg.norm(self.getTargetPos()[:2] - self.robot_pos[:2], 2) ## TODO TODO
+        distance = np.linalg.norm(self.getTargetPos()[:2] - self.getRobotPos()[:2], 2) ## TODO TODO
         reward = 0
 
         if distance <= REWARD_DIST_THRESHOLD:
