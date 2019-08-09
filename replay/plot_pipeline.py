@@ -178,25 +178,17 @@ def comparePlots(path,  algo, y_limits, title="Learning Curve",
     if exclude_list is None:
         exclude_list = []
     folders = []
-    other = []
     legends = []
     for folder in os.listdir(path):
         folders_srl = []
-        other_srl = []
         tmp_path = "{}/{}/{}/".format(path, folder, algo)
         if os.path.exists(tmp_path) and (folder not in exclude_list):  # folder contains algo (e.g. ppo2) subfolder and not in excluded list
             printRed(folder)
             legends.append(folder)
             for f in os.listdir(tmp_path):
                 paths = "{}/{}/{}/{}/".format(path, folder, algo, f)
-                env_globals = json.load(open(paths + "env_globals.json", 'r'))
-                train_args = json.load(open(paths + "args.json", 'r'))
-                if train_args["shape_reward"] == args.shape_reward:
-                    folders_srl.append(paths)
-                else:
-                    other_srl.append(paths)
+                folders_srl.append(paths)
             folders.append(folders_srl)
-            other.append(other_srl)
         else:
             continue
 
