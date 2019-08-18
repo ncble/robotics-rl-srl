@@ -206,3 +206,23 @@ class SRLPCA(SRLBaseClass):
         # Convert to a 1D array
         observation = observation.reshape(-1, n_features)
         return self.model.transform(observation)[0]
+
+
+if __name__ == "__main__":
+    print("start")
+    module = SRLNeuralNetwork(200, 0, img_shape=(3,128,128), n_actions=4, losses=["autoencoder"], split_dimensions={'autoencoder':200})
+    module.load("./srl_zoo/logs/mobileX_png_random/Exp_AE_000/srl_model.pth")
+    # module.getState()
+    from torchsummary import summary
+    import cv2
+    import torch
+    img = cv2.imread("../frame000000.png")
+    img = img / 255
+    img = 2*img - 1
+    img = img.transpose(2, 0, 1)
+    img = img[None, ...]
+    img = torch.from_numpy(img).float()
+    # state = module.getState(img)
+    state = module.model.model(img)
+    print(state)
+    import ipdb; ipdb.set_trace()
