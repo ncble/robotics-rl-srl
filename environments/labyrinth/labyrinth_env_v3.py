@@ -116,15 +116,15 @@ class LabyrinthEnv3(SRLGymEnv):
                 for j in range(self.maze_size):
                     if self.map[i, j] == 0:
                         valid_target_pos_list.append(np.array([i, j], dtype=int))
-            obstacle_ind = np.random.choice(np.arange(len(valid_target_pos_list)), 2, replace=False)
+            obstacle_ind = self.np_random.choice(np.arange(len(valid_target_pos_list)), 2, replace=False)
             for index in sorted(obstacle_ind, reverse=True):
                 self.obstacle_pos.append(valid_target_pos_list.pop(index))
 
-            oak_ind = np.random.choice(np.arange(len(valid_target_pos_list)), 2, replace=False)
+            oak_ind = self.np_random.choice(np.arange(len(valid_target_pos_list)), 2, replace=False)
             for index in sorted(oak_ind, reverse=True):
                 self.oak_pos.append(valid_target_pos_list.pop(index))
 
-            for index in np.random.choice(np.arange(len(valid_target_pos_list)), 2, replace=False):  # randomly choose two targets
+            for index in self.np_random.choice(np.arange(len(valid_target_pos_list)), 2, replace=False):  # randomly choose two targets
                 self.target_pos.append(valid_target_pos_list[index])
             
         for key_pos in self.target_pos:
@@ -172,7 +172,7 @@ class LabyrinthEnv3(SRLGymEnv):
         self._observation = None
         valid_robot_pos_list = self.create_map()
         # put robot
-        self.robot_pos = valid_robot_pos_list[np.random.choice(np.arange(len(valid_robot_pos_list)))]
+        self.robot_pos = valid_robot_pos_list[self.np_random.choice(np.arange(len(valid_robot_pos_list)))]
         self.map[self.robot_pos[0], self.robot_pos[1]] = 2
 
         self._observation = self.getObservation(start=True)
@@ -362,7 +362,7 @@ if __name__ == "__main__":
         img_shape = tuple(map(int, args.img_shape[1:-1].split(",")))
     _, RENDER_HEIGHT, RENDER_WIDTH = img_shape
 
-    np.random.seed(args.seed)
     Env = LabyrinthEnv3(random_target=args.random_target)
+    Env.seed(args.seed)
     Env.reset()
     Env.interactive(show_map=args.show_map)
